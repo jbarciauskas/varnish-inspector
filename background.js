@@ -4,25 +4,23 @@ chrome.webRequest.onHeadersReceived.addListener(function (details) {
   if(!(details.tabId in buttons)) {
     buttons[details.tabId] = {
       'active': false,
-      'status': null,
-      'hits':   null
+      'status': '',
+      'hits':   0
     };
   }
   if (details.type === 'main_frame') {
     var headers = details.responseHeaders;
     for (var i = 0; i < headers.length; i++) {
       var header = headers[i];
-      if (header.name === 'Via' && header.value.indexOf('varnish')) {
+      if (header.name === 'X-Varnish') {
         buttons[details.tabId].active = true;
-      }
-      if (header.name === 'X-Cache') {
-        if (header.value.indexOf('HIT') !== -1) {
+        if (header.value.match(/\d+\s+\d+/)) {
             buttons[details.tabId].status = 'hit';
-        } else if (header.value.indexOf('MISS') !== -1) {
+        } else {
             buttons[details.tabId].status = 'miss';
         }
       }
-      if(header.name === 'X-Cache-Hits') {
+      if(header.name.toLowerCase() == 'x-cache-hits') {
         buttons[details.tabId].hits =  header.value;
       }
     }
