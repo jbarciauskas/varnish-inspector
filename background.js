@@ -20,7 +20,7 @@ chrome.webRequest.onHeadersReceived.addListener(function (details) {
             buttons[details.tabId].status = 'miss';
         }
       }
-      if(header.name === 'X-Cache-Hits') {
+      if(header.name.toLowerCase() == 'x-cache-hits') {
         buttons[details.tabId].hits =  header.value;
       }
     }
