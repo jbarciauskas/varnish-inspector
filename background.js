@@ -45,8 +45,14 @@ chrome.webNavigation.onCompleted.addListener(function(details) {
             color: [0, 160, 0, 200],
             tabId: details.tabId
           });
+          if(buttons[details.tabId].hits == undefined) {
+            var text = 'HIT';
+          } else {
+            var text = buttons[details.tabId].hits;
+          }
+            
           chrome.browserAction.setBadgeText({
-            text: buttons[details.tabId].hits,
+            text: text,
             tabId: details.tabId
           });
           break;
